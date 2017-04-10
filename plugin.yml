@@ -1,0 +1,16 @@
+main: xyz.teamhydroxide.sgfriends.SGFriends
+website: http://teamhydroxide.org
+name: SGFriends
+authors: [MadScientist, Xenon]
+version: 1
+commands:
+  fc:
+    usage: ERROR
+    description: Friend Chat shortcut
+  ftp:
+    usage: ERROR
+    description: Friend teleport
+  friend:
+    description: Friend system
+    usage: ERROR
+    permission: sgov.friend
