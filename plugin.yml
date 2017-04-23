@@ -15,3 +15,6 @@ commands:
     description: Friend system
     usage: ERROR
     permission: sgov.friend
+  fhome:
+      description: Teleport to a friend's home
+      usage: ERROR

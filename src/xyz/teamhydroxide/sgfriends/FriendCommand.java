@@ -3,6 +3,7 @@ package xyz.teamhydroxide.sgfriends;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -104,6 +105,22 @@ public class FriendCommand implements CommandExecutor {
 				}
 				return true;
 			}
+            if (cmd.getName().equalsIgnoreCase("fhome"& SGFriends.checkMutualFriends=true)) {
+                if (args.length == 1) {
+                    Player targetPlayer = player.getServer().getPlayer(args[1]);
+                    if (targetPlayer == null) {
+                        player.sendMessage(ChatColor.LIGHT_PURPLE + "Player not found.");
+                    } else {
+                       Location targetLocation = targetPlayer.getBedSpawnLocation();
+                        player.teleport(targetLocation);
+                    }
+
+                }
+            }
+
+
+
+
 		}
 		return false;
 	}
