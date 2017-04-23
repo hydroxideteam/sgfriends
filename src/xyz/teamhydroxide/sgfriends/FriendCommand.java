@@ -1,7 +1,6 @@
 package xyz.teamhydroxide.sgfriends;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -12,6 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import net.md_5.bungee.api.ChatColor;
+import xyz.teamhydroxide.sgfriends.lib.FriendLibrary;
 
 // this class recieves and handles '/friend' commands
 public class FriendCommand implements CommandExecutor {
@@ -30,7 +30,7 @@ public class FriendCommand implements CommandExecutor {
 				if(cmd.getName().equalsIgnoreCase("teleport")){
 					Player teleportTarget = player.getServer().getPlayer(args[0]);
 
-					if (SGFriends.checkMutualFriends(player, teleportTarget)) {
+					if (FriendLibrary.checkMutualFriends(player, teleportTarget)) {
 						player.teleport(teleportTarget.getLocation()); 
 						teleportTarget.sendMessage(ChatColor.GRAY+player.getDisplayName()+" has teleported to you.");
 						player.sendMessage(ChatColor.GRAY+"You have been teleported.");
@@ -53,7 +53,7 @@ public class FriendCommand implements CommandExecutor {
 
 					if (args[0].equalsIgnoreCase("add") && args.length >= 2) {
 
-						Player friend = (Player) Bukkit.getServer().getPlayer(args[1]);
+						Player friend = Bukkit.getServer().getPlayer(args[1]);
 
 						if (friend == null) {
 							player.sendMessage(ChatColor.RED+"ERROR: Player not found!");
@@ -61,16 +61,18 @@ public class FriendCommand implements CommandExecutor {
 							YamlConfiguration list = FriendData.load();
 
 							List<String> friendlist = list.getStringList(player.getUniqueId()+".list");
-
-							if (friendlist.contains(friend.getUniqueId().toString())) {
-								player.sendMessage(ChatColor.RED+"ERROR: This player is already on your friend list.");
-							} else {
-								player.sendMessage("You have added "+friend.getDisplayName()+" to your friend list.");
-								friend.sendMessage(player.getDisplayName()+ChatColor.YELLOW+" has added you to their friend list.");
-								friendlist.add(friend.getUniqueId().toString());
-
-								list.set(player.getUniqueId()+".list", friendlist);
-								FriendData.save(list);
+	
+							if (friendlist != null) {
+								if (friendlist.contains(friend.getUniqueId().toString())) {
+									player.sendMessage(ChatColor.RED+"ERROR: This player is already on your friend list.");
+								} else {
+									player.sendMessage("You have added "+friend.getDisplayName()+" to your friend list.");
+									friend.sendMessage(player.getDisplayName()+ChatColor.YELLOW+" has added you to their friend list.");
+									friendlist.add(friend.getUniqueId().toString());
+	
+									list.set(player.getUniqueId()+".list", friendlist);
+									FriendData.save(list);
+								}
 							}
 
 						}
@@ -96,16 +98,9 @@ public class FriendCommand implements CommandExecutor {
 			// give the sender a list of their friends
 			if (args[0].equalsIgnoreCase("list")) {
 				// load configuration into a YamlConfiguration
-				YamlConfiguration list = FriendData.load();
-
-				List<String> friendlist = list.getStringList(player.getUniqueId()+".list");
-				// get a list<string> from it
-				for (String friendUUID : friendlist) {
-
-
-					OfflinePlayer friend = Bukkit.getServer().getOfflinePlayer(UUID.fromString(friendUUID));
-					player.sendMessage(ChatColor.GRAY+friend.getName());
-
+				List<OfflinePlayer> list = FriendLibrary.getPlayerFriendList(player);
+				for (OfflinePlayer p : list) {
+					player.sendMessage(ChatColor.GRAY+p.getName());
 				}
 				return true;
 			}

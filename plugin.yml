@@ -1,8 +1,9 @@
-main: xyz.teamhydroxide.sgfriends.SGFriends
+main: xyz.teamhydroxide.sgfriends.Main
 website: http://teamhydroxide.org
 name: SGFriends
 authors: [MadScientist, Xenon]
 version: 1
+depends: [ServerGoverner]
 commands:
   fc:
     usage: ERROR
