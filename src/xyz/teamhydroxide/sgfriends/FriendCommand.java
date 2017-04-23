@@ -9,6 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import xyz.teamhydroxide.utils.YamlData;
 
 import net.md_5.bungee.api.ChatColor;
 import xyz.teamhydroxide.sgfriends.lib.FriendLibrary;
@@ -58,21 +59,20 @@ public class FriendCommand implements CommandExecutor {
 						if (friend == null) {
 							player.sendMessage(ChatColor.RED+"ERROR: Player not found!");
 						} else {
-							YamlConfiguration list = FriendData.load();
+							YamlConfiguration list = YamlData.load("friends");
 
 							List<String> friendlist = list.getStringList(player.getUniqueId()+".list");
-	
-							if (friendlist != null) {
-								if (friendlist.contains(friend.getUniqueId().toString())) {
-									player.sendMessage(ChatColor.RED+"ERROR: This player is already on your friend list.");
-								} else {
-									player.sendMessage("You have added "+friend.getDisplayName()+" to your friend list.");
-									friend.sendMessage(player.getDisplayName()+ChatColor.YELLOW+" has added you to their friend list.");
-									friendlist.add(friend.getUniqueId().toString());
-	
-									list.set(player.getUniqueId()+".list", friendlist);
-									FriendData.save(list);
-								}
+
+
+							if (friendlist.contains(friend.getUniqueId().toString())) {
+								player.sendMessage(ChatColor.RED+"ERROR: This player is already on your friend list.");
+							} else {
+								player.sendMessage("You have added "+friend.getDisplayName()+" to your friend list.");
+								friend.sendMessage(player.getDisplayName()+ChatColor.YELLOW+" has added you to their friend list.");
+								friendlist.add(friend.getUniqueId().toString());
+
+								list.set(player.getUniqueId()+".list", friendlist);
+								YamlData.save("friends",list);
 							}
 
 						}
@@ -85,7 +85,7 @@ public class FriendCommand implements CommandExecutor {
 				if (friend == null) {
 					player.sendMessage(ChatColor.RED+"ERROR: Player not found!");
 				} else {
-					YamlConfiguration list = FriendData.load();
+					YamlConfiguration list = YamlData.load("friends");
 					List<String> friendlist = list.getStringList(player.getUniqueId()+".list");
 					if (friendlist.contains(friend.getUniqueId())); {
 						friendlist.remove(friend);
