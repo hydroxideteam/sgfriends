@@ -14,7 +14,11 @@ public class Main extends JavaPlugin {
 		
 		
 		// Command Executors
-		getCommand("friend").setExecutor(new FriendCommand());
+		
+		FriendCommand friendCommand = new FriendCommand();
+		getCommand("friend").setExecutor(friendCommand);
+		getCommand("fhome").setExecutor(friendCommand);
+		getCommand("ftp").setExecutor(friendCommand);
 	}
 	
 	public void onDisable() {

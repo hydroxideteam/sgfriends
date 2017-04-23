@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import xyz.teamhydroxide.utils.YamlData;
 
 import net.md_5.bungee.api.ChatColor;
+import xyz.teamhydroxide.servergoverner.Main;
 import xyz.teamhydroxide.sgfriends.lib.FriendLibrary;
 
 // this class recieves and handles '/friend' commands
@@ -27,7 +28,24 @@ public class FriendCommand implements CommandExecutor {
 		// TODO Auto-generated method stub
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-
+			if (cmd.getName().equalsIgnoreCase("fhome")) {
+				if (args.length > 0) {
+					Player p = Bukkit.getServer().getPlayer(args[0]);
+					
+					if (p == null) {
+						player.sendMessage(Main.SGprefix+ChatColor.RED+"ERROR: player not found");
+					} else {
+						if (FriendLibrary.checkMutualFriends(player, p)) {
+							Location bedLoc = p.getBedSpawnLocation();
+							
+							player.teleport(bedLoc);
+						} else {
+							player.sendMessage(Main.SGprefix+ChatColor.RED+"ERROR: you cannot teleport to this player's bed");
+						}
+					}
+					return true;
+				}
+			}
 			if (cmd.getName().equalsIgnoreCase("ftp")) {
 				if(cmd.getName().equalsIgnoreCase("teleport")){
 					Player teleportTarget = player.getServer().getPlayer(args[0]);
@@ -105,18 +123,9 @@ public class FriendCommand implements CommandExecutor {
 				}
 				return true;
 			}
-            if (cmd.getName().equalsIgnoreCase("fhome"& SGFriends.checkMutualFriends=true)) {
-                if (args.length == 1) {
-                    Player targetPlayer = player.getServer().getPlayer(args[1]);
-                    if (targetPlayer == null) {
-                        player.sendMessage(ChatColor.LIGHT_PURPLE + "Player not found.");
-                    } else {
-                       Location targetLocation = targetPlayer.getBedSpawnLocation();
-                        player.teleport(targetLocation);
-                    }
-
-                }
-            }
+			
+			
+            
 
 
 
